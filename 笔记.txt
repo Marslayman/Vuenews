@@ -1,0 +1,651 @@
+v-model	一般表单元素(input)	双向数据绑定
+
+	循环:
+		v-for="name in arr"
+			{{$index}}
+
+		v-for="name in json"
+			{{$index}}	{{$key}}
+	
+		v-for="(k,v) in json"
+	事件:
+		v-on:click="函数"
+
+		v-on:click/mouseout/mouseover/dblclick/mousedown.....
+
+		new Vue({
+			el:'#box',
+			data:{ //数据
+			    arr:['apple','banana','orange','pear'],
+			    json:{a:'apple',b:'banana',c:'orange'}
+			},
+			methods:{
+			    show:function(){	//方法
+			        alert(1);
+			    }
+			}
+		});
+	显示隐藏:
+		v-show=“true/false”
+bootstrap+vue简易留言板(todolist):
+	
+	bootstrap: css框架	跟jqueryMobile一样
+		只需要给标签 赋予class，角色
+		依赖jquery
+
+	确认删除？和确认删除全部么?
+-----------------------------------------
+事件:
+	v-on:click/mouseover......
+	
+	简写的:
+	@click=""		推荐
+
+	事件对象:
+		@click="show($event)"
+	事件冒泡:
+		阻止冒泡:  
+			a). ev.cancelBubble=true;
+			b). @click.stop	推荐
+	默认行为(默认事件):
+		阻止默认行为:
+			a). ev.preventDefault();
+			b). @contextmenu.prevent	推荐
+	键盘:
+		@keydown	$event	ev.keyCode
+		@keyup
+
+		常用键:
+			回车
+				a). @keyup.13
+				b). @keyup.enter
+			上、下、左、右
+				@keyup/keydown.left
+				@keyup/keydown.right
+				@keyup/keydown.up
+				@keyup/keydown.down
+			.....
+-----------------------------------------
+属性:
+	v-bind:src=""
+		width/height/title....
+	
+	简写:
+	:src=""	推荐
+
+	<img src="{{url}}" alt="">	效果能出来，但是会报一个404错误
+	<img v-bind:src="url" alt="">	效果可以出来，不会发404请求
+-----------------------------------------
+class和style:
+	:class=""	v-bind:class=""
+	:style=""	v-bind:style=""
+
+	:class="[red]"	red是数据
+	:class="[red,b,c,d]"
+	
+	:class="{red:a, blue:false}"
+
+	:class="json"
+		
+		data:{
+			json:{red:a, blue:false}
+		}
+	--------------------------
+	style:
+	:style="[c]"
+	:style="[c,d]"
+		注意:  复合样式，采用驼峰命名法
+	:style="json"
+-----------------------------------------
+模板:
+	{{msg}}		数据更新模板变化
+	{{*msg}}	数据只绑定一次
+	
+	{{{msg}}}	HTML转意输出
+-----------------------------------------
+过滤器:-> 过滤模板数据
+	系统提供一些过滤器:
+	
+	{{msg| filterA}}
+	{{msg| filterA | filterB}}
+
+	uppercase	eg:	{{'welcome'| uppercase}}
+	lowercase
+	capitalize
+
+	currency	钱
+
+	{{msg| filterA 参数}}
+
+	....
+-----------------------------------------
+交互:
+	$http	（ajax）
+
+	如果vue想做交互
+
+	引入: vue-resouce
+
+	get:
+		获取一个普通文本数据:
+		this.$http.get('aa.txt').then(function(res){
+		    alert(res.data);
+		},function(res){
+		    alert(res.status);
+		});
+		给服务发送数据:√
+		this.$http.get('get.php',{
+		    a:1,
+		    b:2
+		}).then(function(res){
+		    alert(res.data);
+		},function(res){
+		    alert(res.status);
+		});
+	post:
+		this.$http.post('post.php',{
+		    a:1,
+		    b:20
+		},{
+		    emulateJSON:true
+		}).then(function(res){
+		    alert(res.data);
+		},function(res){
+		    alert(res.status);
+		});
+	jsonp:
+		https://sug.so.360.cn/suggest?callback=suggest_so&word=a
+
+		https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=a&cb=jshow
+
+		this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+		    wd:'a'
+		},{
+		    jsonp:'cb'	//callback名字，默认名字就是"callback"
+		}).then(function(res){
+		    alert(res.data.s);
+		},function(res){
+		    alert(res.status);
+		});
+		
+https://www.baidu.com/s?wd=s
+
+	作业:
+		1. 简易留言-> 确认删除? 确认删除全部
+		2. 用vue get 写个例子	weibo
+		
+		
+		
+git page：
+	任何仓库 master分支，都可以发布(git page)
+-------------------------------------
+双向过滤器:
+	Vue.filter(name,{
+		read:
+		write:
+	});
+-------------------------------------
+1.0
+2.0
+-------------------------------------
+引入 vue.js
+-------------------------------------
+bower-> （前端）包管理器
+	npm install bower -g
+		验证: bower --version
+
+bower install <包名>
+bower uninstall <包名>
+bower info <包名>	查看包版本信息
+
+<script src="bower_components/vue/dist/vue.js"></script>
+-------------------------------------
+vue-> 过渡(动画)
+	本质走的css3: transtion ,animation
+
+	<div id="div1" v-show="bSign" transition="fade"></div>
+
+	动画:
+		.fade-transition{
+			
+		}
+		进入：
+		.fade-enter{
+			opacity: 0;
+		}
+		离开：
+		.fade-leave{
+			opacity: 0;
+			transform: translateX(200px);
+		}
+	----------------------------------------
+vue组件:
+	组件: 一个大对象
+定义一个组件:
+1. 全局组件
+var Aaa=Vue.extend({
+	template:'<h3>我是标题3</h3>'
+});
+
+Vue.component('aaa',Aaa);
+
+	*组件里面放数据:
+		data必须是函数的形式，函数必须返回一个对象(json)
+2. 局部组件
+	放到某个组件内部
+var vm=new Vue({
+	el:'#box',
+	data:{
+		bSign:true
+	},
+	components:{ //局部组件
+		aaa:Aaa
+	}
+});
+--------------------------------------
+另一种编写方式:
+	Vue.component('my-aaa',{
+		template:'<strong>好</strong>'
+	});
+
+	var vm=new Vue({
+		el:'#box',
+		components:{
+			'my-aaa':{
+				template:'<h2>标题2</h2>'
+			}
+		}
+	});
+-----------------------------------
+配合模板:
+	1. template:'<h2 @click="change">标题2->{{msg}}</h2>'
+
+	2. 单独放到某个地方
+		a). <script type="x-template" id="aaa">
+			<h2 @click="change">标题2->{{msg}}</h2>
+		</script>
+		b). <template id="aaa">
+			<h1>标题1</h1>
+			<ul>
+				<li v-for="val in arr">
+					{{val}}
+				</li>
+			</ul>
+		</template>
+-----------------------------------
+动态组件:
+	<component :is="组件名称"></component>
+--------------------------------------------
+vue-devtools	->  调试工具
+	https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd
+--------------------------------------------
+vue默认情况下，子组件也没法访问父组件数据
+
+--------------------------------------------
+组件数据传递:	√
+1. 子组件就想获取父组件data
+	在调用子组件：
+		<bbb :m="数据"></bbb>
+
+	子组件之内:
+		props:['m','myMsg']
+
+		props:{
+			'm':String,
+			'myMsg':Number
+		}
+2. 父级获取子级数据
+	*子组件把自己的数据，发送到父级
+
+	vm.$emit(事件名,数据);
+
+	v-on:	@
+--------------------------------------------
+vm.$dispatch(事件名,数据)	子级向父级发送数据
+vm.$broadcast(事件名,数据)	父级向子级广播数据
+	配合: event:{}
+
+	在vue2.0里面已经，报废了
+--------------------------------------------
+slot:
+	位置、槽口
+	作用: 占个位置
+
+	类似ng里面 transclude  （指令）
+--------------------------------------------
+vue-> SPA应用，单页面应用
+	vue-resouce	交互
+	vue-router	路由
+
+	根据不同url地址，出现不同效果
+
+	咱上课: 0.7.13
+
+主页	home
+新闻页	news
+
+
+html:
+	<a v-link="{path:'/home'}">主页</a>	跳转链接
+	
+	展示内容:
+	<router-view></router-view>
+js:
+	//1. 准备一个根组件
+	var App=Vue.extend();
+
+	//2. Home News组件都准备
+	var Home=Vue.extend({
+		template:'<h3>我是主页</h3>'
+	});
+
+	var News=Vue.extend({
+		template:'<h3>我是新闻</h3>'
+	});
+
+	//3. 准备路由
+	var router=new VueRouter();
+
+	//4. 关联
+	router.map({
+		'home':{
+			component:Home
+		},
+		'news':{
+			component:News
+		}
+	});
+
+	//5. 启动路由
+	router.start(App,'#box');
+
+跳转:
+	router.redirect({
+		‘/’:'/home'
+	});
+--------------------------------------
+路由嵌套(多层路由):
+	
+	主页	home
+		登录	home/login
+		注册	home/reg
+	新闻页	news
+
+	subRoutes:{
+		'login':{
+			component:{
+				template:'<strong>我是登录信息</strong>'
+			}
+		},
+		'reg':{
+			component:{
+				template:'<strong>我是注册信息</strong>'
+			}
+		}
+	}
+路由其他信息:
+	/detail/:id/age/:age
+
+	{{$route.params | json}}	->  当前参数
+
+	{{$route.path}}	->  当前路径
+	
+	{{$route.query | json}}	->  数据
+--------------------------------------------
+vue-loader:
+	其他loader ->  css-loader、url-loader、html-loader.....
+
+	后台: nodeJs	->  require  exports
+	broserify  模块加载，只能加载js
+	webpack   模块加载器， 一切东西都是模块, 最后打包到一块了
+
+	require('style.css');	->   css-loader、style-loader
+
+	
+	vue-loader基于webpack
+
+.css
+.js
+.html
+.php
+.....
+
+
+a.vue
+b.vue
+
+	.vue文件:
+		放置的是vue组件代码
+
+		<template>
+			html
+		</template>
+	
+		<style>
+			css
+		</style>
+	
+		<script>
+			js	（平时代码、ES6）	babel-loader
+		</script>
+-------------------------------------
+简单的目录结构:
+	|-index.html
+	|-main.js	入口文件
+	|-App.vue	vue文件，官方推荐命名法
+	|-package.json	工程文件(项目依赖、名称、配置)
+		npm init --yes 生成
+	|-webpack.config.js	webpack配置文件
+
+ES6: 模块化开发
+	导出模块：
+		export default {}
+	引入模块:
+		import 模块名 from 地址
+--------------------------------------------
+webpak准备工作:
+	cnpm install webpack --save-dev
+	cnpm install webpack-dev-server --save-dev
+
+	App.vue	-> 变成正常代码		vue-loader@8.5.4
+	cnpm install vue-loader@8.5.4 --save-dev
+
+	cnpm install vue-html-loader --save-dev
+	
+	vue-html-loader、css-loader、vue-style-loader、
+	vue-hot-reload-api@1.3.2
+
+	babel-loader
+	babel-core
+	babel-plugin-transform-runtime
+	babel-preset-es2015
+	babel-runtime
+
+最最核心：
+
+
+
+
+
+
+vue2.0:
+	bower info vue
+
+	http://vuejs.org/
+到了2.0以后，有哪些变化?
+
+1. 在每个组件模板，不在支持片段代码
+	组件中模板:
+		之前:
+			<template>
+				<h3>我是组件</h3><strong>我是加粗标签</strong>
+			</template>
+		现在:  必须有根元素，包裹住所有的代码
+			<template id="aaa">
+			        <div>
+			            <h3>我是组件</h3>
+			            <strong>我是加粗标签</strong>
+			        </div>
+			</template>
+2. 关于组件定义
+	Vue.extend	这种方式，在2.0里面有，但是有一些改动，这种写法，即使能用，咱也不用——废弃
+	
+	Vue.component(组件名称,{	在2.0继续能用
+		data(){}
+		methods:{}
+		template:
+	});
+
+	2.0推出一个组件，简洁定义方式：
+	var Home={
+		template:''		->   Vue.extend()
+	};
+3. 生命周期
+	之前:
+		init	
+		created
+		beforeCompile
+		compiled
+		ready		√	->     mounted
+		beforeDestroy	
+		destroyed
+	现在:
+		beforeCreate	组件实例刚刚被创建,属性都没有
+		created	实例已经创建完成，属性已经绑定
+		beforeMount	模板编译之前
+		mounted	模板编译之后，代替之前ready  *
+		beforeUpdate	组件更新之前
+		updated	组件更新完毕	*
+		beforeDestroy	组件销毁前
+		destroyed	组件销毁后
+3. 循环
+	2.0里面默认就可以添加重复数据
+
+	arr.forEach(function(item,index){
+
+	});
+
+	去掉了隐式一些变量
+		$index	$key
+
+	之前:
+		v-for="(index,val) in array"
+	现在:
+		v-for="(val,index) in array"
+
+
+4. track-by="id"
+	变成
+		<li v-for="(val,index) in list" :key="index">
+5. 自定义键盘指令
+	之前：Vue.directive('on').keyCodes.f1=17;	
+	
+	现在:  Vue.config.keyCodes.ctrl=17
+6. 过滤器
+	之前:
+		系统就自带很多过滤
+		{{msg | currency}}
+		{{msg | json}}
+		....
+		limitBy
+		filterBy
+		.....
+	一些简单功能，自己通过js实现
+
+	到了2.0， 内置过滤器，全部删除了
+
+
+	lodash	工具库	_.debounce(fn,200)
+
+
+	自定义过滤器——还有
+		但是,自定义过滤器传参
+
+		之前:	{{msg | toDou '12' '5'}}
+		现在: 	{{msg | toDou('12','5')}}
+------------------------------------------------------
+组件通信:
+	vm.$emit()
+	vm.$on();
+
+	父组件和子组件:
+
+	子组件想要拿到父组件数据:
+		通过  props
+
+	之前，子组件可以更改父组件信息，可以是同步  sync
+	现在，不允许直接给父级的数据，做赋值操作
+
+	问题，就想更改：
+		a). 父组件每次传一个对象给子组件, 对象之间引用	√
+		b). 只是不报错, mounted中转
+------------------------------------------------------
+可以单一事件管理组件通信:	vuex
+	var Event=new Vue();
+
+	Event.$emit(事件名称, 数据)
+
+	Event.$on(事件名称,function(data){
+		//data
+	}.bind(this));
+------------------------------------------------------
+debounce	废弃
+	->   lodash
+		_.debounce(fn,时间)
+------------------------------------------------------
+
+
+
+
+
+
+
+
+
+新闻客户端总结：
+vuex:
+Vuex在做export的时候
+对象属性的名字一定要符合规定：
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import Actions from './actions.js'
+import Getters from './getter.js'
+import Mutations from './muntations.js'
+
+Vue.use(Vuex);
+export default new Vuex.Store({
+    actions: actionsname(Actions),
+	modules:{
+	mutations:mutationsname(Mutations)
+	},
+	getters:gettersname(Getters)
+})
+
+在全局中做vuex store挂载的时候属性名称也必须符合标准store
+import stores from './store/store'
+var routers = new VueRouter({
+routes:routesname})//routes 熟悉相同规则
+
+new Vue({
+   el:'#app'
+   store:stores  //若引入时将名字命名为属性规定名称，即store，则可以使用“store，”这种简写方式
+   router:routername  // router 属性相同规则
+})
+
+在路由中，可以使用keep-alive组件将rooter-view 包裹，用于防止路由组件重复mounted（）
+<keep-alive>
+	<router-view>
+	</router-view>
+</keep-alive>
+这个时候在mounted里使用this.$route.params.varable ,值只能获取到一次，需要配合watch：｛$route(to,from){}｝使用来获取每次传递的route参数
+
+Vuex:
+getter会在mounted（）时优先执行一次
+
+
+watch :{
+    $route(to,from)｛
+	｝
+	
+}
